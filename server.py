@@ -59,9 +59,19 @@ class SpectreShieldHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
 
-        if path in ("/", "/index.html"):
+        if path in ("/", "/index.html", "/blog", "/blog.html"):
             index_path = BASE_DIR / "index.html"
             content = index_path.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+            return
+
+        if path in ("/demo", "/demo.html"):
+            demo_path = BASE_DIR / "demo.html"
+            content = demo_path.read_bytes()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(content)))
